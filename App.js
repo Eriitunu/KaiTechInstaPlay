@@ -1,7 +1,7 @@
 import React from 'react';
-import {Text, View, ScrollView, TouchableHighlight, Image, StatusBar } from 'react-native';
+import {Text, View, ScrollView, TouchableHighlight, Image, StatusBar, Linking } from 'react-native';
 import Dimensions from 'Dimensions';
-import {LoginButton} from './src/components';
+import {LoginButton, TappableText } from './src/components';
 
 
 const window = Dimensions.get('window');
@@ -21,6 +21,10 @@ const loginButtonInfo = {
   pageFontSize: 11,
   borderWidth: 0.8,
   borderRadius: 5,
+}
+
+const urls = {
+  forgottenInstagramLogin: 'https://www.instagram.com/accounts/password/reset'
 }
 
 export default class App extends React.Component {
@@ -66,6 +70,18 @@ export default class App extends React.Component {
 
             Facebook Login
           </LoginButton>
+
+          <View style={viewStyles.forgottenLoginEncapsulationView}>
+            <Text style={textStyles.forgottenLogin}> Forgotten your login details? </Text>
+            <TappableText
+              textStyle={[textStyles.forgottenLogin, textStyles.forgottenLoginBold]}
+              textTapped={() => Linking.openURL(urls.forgottenInstagramLogin)}
+            >
+              Get Help Signing In
+              </TappableText>
+          </View>
+
+
         </ScrollView>
 
 
@@ -131,6 +147,28 @@ const viewStyles = {
 
   buttonTextStyle: {
     color: colors.text
+  },
+  forgottenLoginEncapsulationView: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    marginTop:10,
+    marginBottom: window.height * 0.15
+
+
   }
 
+};
+
+const textStyles = {
+
+  forgottenLogin: {
+    color: 'white',
+    fontSize: loginButtonInfo.pageFontSize
+  },
+
+  forgottenLoginBold: {
+    fontWeight: 'bold'
+  }
 };
