@@ -24,7 +24,9 @@ const loginButtonInfo = {
 }
 
 const urls = {
-  forgottenInstagramLogin: 'https://www.instagram.com/accounts/password/reset'
+  forgottenInstagramLogin: 'https://www.instagram.com/accounts/password/reset' ,
+  twitterLogin: 'https://www.twitter.com/login?lang=en',
+  instagramSignUp: 'https://www.instagram.com/accounts/emailsignup/?hl=en'
 }
 
 export default class App extends React.Component {
@@ -43,6 +45,39 @@ orSeperatorComponent = () => {
     );
 }
 
+signUpFooter = () => {
+  return (
+    <View style={[viewStyles.forgottenLoginEncapsulationView,viewStyles.signUpFooterComponent]}>
+      <Text style={textStyles.forgottenLogin}> Dont you have an account? </Text>
+      <TappableText
+        textStyle={[textStyles.forgottenLogin,textStyles.forgottenLoginBold]}
+        textTapped={() => Linking.openURL(urls.instagramSignUp)}
+      >
+      Sign Up
+      </TappableText>
+    </View>
+  );
+
+}
+
+
+loginWithTwitterTappableTextComponent = () => {
+  return (
+    <View style={viewStyles.twitterLoginEncapsulatingView}>
+      <Image
+      source={require('./src/Images/twitter_bird.png')}
+      style={viewStyles.twitterIcon}
+      resizeMode={'contain'}
+      />
+      <TappableText
+      textStyle ={textStyles.twitterLoginText}
+      textTapped={() => Linking.openURL(urls.twitterLogin)}
+      >
+        Log in with Twitter
+      </TappableText>
+    </View>
+  )
+}
   render() {
     return (
       <Image source={require('./src/Images/insta_login_background.jpg')} style={viewStyles.container}>
@@ -93,8 +128,13 @@ orSeperatorComponent = () => {
 
           {this.orSeperatorComponent()}
 
+          {this.loginWithTwitterTappableTextComponent()}
+
         </ScrollView>
 
+        {this.signUpFooter(
+
+        )}
 
       </Image>
     );
@@ -173,8 +213,8 @@ const viewStyles = {
     flexDirection: 'row',
     paddingHorizontal: 10,
     paddingVertical: 2,
-    marginVertical: 25,
-    
+    marginTop: 25,
+    marginBottom: 15,
     alignItems: 'center'
   },
   orSeperatorLine: {
@@ -183,7 +223,33 @@ const viewStyles = {
     backgroundColor:colors.facebookButtonBorderColor,
     borderColor: colors.facebookButtonBorderColor,
     borderWidth: 0.5
+  },
+  twitterLoginEncapsulatingView: {
+    flexDirection: 'row',
+    paddingHorizontal: 10,
+    width: standardComponentWidth,
+    height: 30,
+    justifyContent: 'center',
+
+    alignItems: 'center'
+  },
+  twitterIcon: {
+    width: 20,
+    height: 20
+  },
+  signUpFooterComponent: {
+    flex: 0.3,
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.15)',
+    shadowColor: 'black',
+    shadowOffset: {width: 0, height: 1},
+    elevation: 2,
+    height: null,
+    width: window.width
   }
+
+
 
 };
 
@@ -203,6 +269,15 @@ const textStyles = {
     marginHorizontal: 4,
     flex: 1,
     backgroundColor: 'transparent',
+    color: colors.facebookButtonBorderColor,
+  },
+  twitterLoginText: {
+    fontWeight: 'bold',
+    fontSize: 11.5,
+    marginLeft: 5,
     color: 'white',
+    backgroundColor:'transparent',
+
+
   }
 };
