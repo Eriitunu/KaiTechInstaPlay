@@ -19,6 +19,7 @@ class LoginButton extends Component{
           <View style={this.props.buttonViewStyle}>
 
             <Text style={this.props.buttonTextStyle}>{this.props.children}</Text>
+            
           </View>
 
 

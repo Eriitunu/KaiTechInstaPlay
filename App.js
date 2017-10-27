@@ -33,6 +33,16 @@ export default class App extends React.Component {
     console.log('button was just tapped');
   }
 
+orSeperatorComponent = () => {
+    return (
+      <View style={viewStyles.orSeperatorComponent}>
+        <View style={viewStyles.orSeperatorLine}/>
+        <Text style={textStyles.orSeperatorText}> OR </Text>
+        <View style={viewStyles.orSeperatorLine}/>
+      </View>
+    );
+}
+
   render() {
     return (
       <Image source={require('./src/Images/insta_login_background.jpg')} style={viewStyles.container}>
@@ -81,6 +91,7 @@ export default class App extends React.Component {
               </TappableText>
           </View>
 
+          {this.orSeperatorComponent()}
 
         </ScrollView>
 
@@ -154,9 +165,24 @@ const viewStyles = {
     alignItems: 'center',
     backgroundColor: 'transparent',
     marginTop:10,
-    marginBottom: window.height * 0.15
 
 
+  },
+
+  orSeperatorComponent: {
+    flexDirection: 'row',
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    marginVertical: 25,
+    
+    alignItems: 'center'
+  },
+  orSeperatorLine: {
+    height: 1,
+    flex: 5,
+    backgroundColor:colors.facebookButtonBorderColor,
+    borderColor: colors.facebookButtonBorderColor,
+    borderWidth: 0.5
   }
 
 };
@@ -170,5 +196,13 @@ const textStyles = {
 
   forgottenLoginBold: {
     fontWeight: 'bold'
+  },
+  orSeperatorText: {
+    fontWeight: 'bold',
+    fontSize: 14,
+    marginHorizontal: 4,
+    flex: 1,
+    backgroundColor: 'transparent',
+    color: 'white',
   }
 };
