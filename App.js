@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, ScrollView, TouchableHighlight, Image, StatusBar, Linking } from 'react-native';
+import {Text, View, ScrollView, TouchableHighlight, Image, StatusBar, Linking, WebView} from 'react-native';
 import Dimensions from 'Dimensions';
 import {LoginButton, TappableText } from './src/components';
 
@@ -26,60 +26,101 @@ const loginButtonInfo = {
 const urls = {
   forgottenInstagramLogin: 'https://www.instagram.com/accounts/password/reset' ,
   twitterLogin: 'https://www.twitter.com/login?lang=en',
-  instagramSignUp: 'https://www.instagram.com/accounts/emailsignup/?hl=en'
+  instagramSignUp: 'https://www.instagram.com/accounts/emailsignup/?hl=en',
+  instagramAuthLoginURL:'https://api.instagram.com/oauth/authorize/?client_id=082e4f7907564093b2d2df83b80718be&redirect_uri=http://kaitechconsulting.com&response_type=token&scope=basic+follower_list+comments+likes',
+  instagramLogout: 'https://instagram.com/accounts/logout',
+  instagramBase: 'https://www.instagram.com/'
 }
 
 export default class App extends React.Component {
 
-  loginButtonTapped = () => {
-    console.log('button was just tapped');
+  constructor(props){
+
+    super(props);
+//initialise the golbal state object
+    this.state = {
+      authenticationURL: urls.instagramLogout,
+      retrievedAccessToken: '',
+      isUserLoggedIn: false,
+      displayAuthenticationWebView: false
+    }
+
   }
 
-orSeperatorComponent = () => {
+  loginButtonTapped = () => {
+    this.setState({displayAuthenticationWebView: true});
+  }
+
+  onURLStateChange = (webViewState) => {
+
+    let accessTokenSubString = 'access_token=';
+
+    console.log("Current webViewState = " + webViewState.url)
+
+    if(webViewState.url == urls.instagramBase){
+      console.log("Aha! Yes this is instagramBase");
+      this.setState({authenticationURL: urls.instagramAuthLoginURL});
+    }
+  }
+
+  orSeperatorComponent = () => {
+      return (
+        <View style={viewStyles.orSeperatorComponent}>
+          <View style={viewStyles.orSeperatorLine}/>
+          <Text style={textStyles.orSeperatorText}> OR </Text>
+          <View style={viewStyles.orSeperatorLine}/>
+        </View>
+      );
+  }
+
+  signUpFooter = () => {
     return (
-      <View style={viewStyles.orSeperatorComponent}>
-        <View style={viewStyles.orSeperatorLine}/>
-        <Text style={textStyles.orSeperatorText}> OR </Text>
-        <View style={viewStyles.orSeperatorLine}/>
+      <View style={[viewStyles.forgottenLoginEncapsulationView,viewStyles.signUpFooterComponent]}>
+        <Text style={textStyles.forgottenLogin}> Dont you have an account? </Text>
+        <TappableText
+          textStyle={[textStyles.forgottenLogin,textStyles.forgottenLoginBold]}
+          textTapped={() => Linking.openURL(urls.instagramSignUp)}
+        >
+        Sign Up
+        </TappableText>
       </View>
     );
-}
 
-signUpFooter = () => {
-  return (
-    <View style={[viewStyles.forgottenLoginEncapsulationView,viewStyles.signUpFooterComponent]}>
-      <Text style={textStyles.forgottenLogin}> Dont you have an account? </Text>
-      <TappableText
-        textStyle={[textStyles.forgottenLogin,textStyles.forgottenLoginBold]}
-        textTapped={() => Linking.openURL(urls.instagramSignUp)}
-      >
-      Sign Up
-      </TappableText>
-    </View>
-  );
+  }
 
-}
-
-
-loginWithTwitterTappableTextComponent = () => {
-  return (
-    <View style={viewStyles.twitterLoginEncapsulatingView}>
-      <Image
-      source={require('./src/Images/twitter_bird.png')}
-      style={viewStyles.twitterIcon}
-      resizeMode={'contain'}
-      />
-      <TappableText
-      textStyle ={textStyles.twitterLoginText}
-      textTapped={() => Linking.openURL(urls.twitterLogin)}
-      >
-        Log in with Twitter
-      </TappableText>
-    </View>
-  )
-}
-  render() {
+  loginWithTwitterTappableTextComponent = () => {
     return (
+      <View style={viewStyles.twitterLoginEncapsulatingView}>
+        <Image
+        source={require('./src/Images/twitter_bird.png')}
+        style={viewStyles.twitterIcon}
+        resizeMode={'contain'}
+        />
+        <TappableText
+        textStyle ={textStyles.twitterLoginText}
+        textTapped={() => Linking.openURL(urls.twitterLogin)}
+        >
+          Log in with Twitter
+        </TappableText>
+      </View>
+    )
+  }
+
+  authenticationWebViewComponent = () => {
+    return(
+      <WebView
+        source={{  uri: this.state.authenticationURL }}
+        startInLoadingState={true}
+        onNavigationStateChange={this.onURLStateChange}
+
+      />
+    );
+  }
+
+
+  logInScreenComponent = () => {
+    return(
+
       <Image source={require('./src/Images/insta_login_background.jpg')} style={viewStyles.container}>
 
         <StatusBar backgroundColor="transparent" barStyle="light-content"/>
@@ -98,8 +139,6 @@ loginWithTwitterTappableTextComponent = () => {
           activeOpacity={0.75}
           >
 
-
-
             Log  Into Erigram
           </LoginButton>
 
@@ -110,8 +149,6 @@ loginWithTwitterTappableTextComponent = () => {
           buttonTapped={this.loginButtonTapped}
           activeOpacity={0.75}
           >
-
-
 
             Facebook Login
           </LoginButton>
@@ -132,12 +169,23 @@ loginWithTwitterTappableTextComponent = () => {
 
         </ScrollView>
 
-        {this.signUpFooter(
-
-        )}
+        {this.signUpFooter()}
 
       </Image>
     );
+  }
+
+  render() {
+    if(!this.state.displayAuthenticationWebView){
+      return (
+        this.logInScreenComponent()
+      );
+    }
+    else {
+      return (
+        this.authenticationWebViewComponent()
+      );
+    }
   }
 }
 
@@ -204,9 +252,7 @@ const viewStyles = {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'transparent',
-    marginTop:10,
-
-
+    marginTop:10
   },
 
   orSeperatorComponent: {
@@ -249,8 +295,6 @@ const viewStyles = {
     width: window.width
   }
 
-
-
 };
 
 const textStyles = {
@@ -276,8 +320,6 @@ const textStyles = {
     fontSize: 11.5,
     marginLeft: 5,
     color: 'white',
-    backgroundColor:'transparent',
-
-
+    backgroundColor:'transparent'
   }
 };
