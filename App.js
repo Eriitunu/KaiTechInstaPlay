@@ -61,6 +61,14 @@ export default class App extends React.Component {
       console.log("Aha! Yes this is instagramBase");
       this.setState({authenticationURL: urls.instagramAuthLoginURL});
     }
+    else if(webViewState.url.includes(accessTokenSubString)){
+
+      let startIndexOfAccessToken = webViewState.url.lastIndexOf(accessTokenSubString) + accessTokenSubString.length;
+      if (this.state.retrievedAccessToken.length < 1) {
+        this.setState({retrievedAccessToken: webViewState.url.substr(startIndexOfAccessToken), displayAuthenticationWebView: false})
+      }
+    }
+
   }
 
   orSeperatorComponent = () => {
@@ -176,14 +184,25 @@ export default class App extends React.Component {
   }
 
   render() {
-    if(!this.state.displayAuthenticationWebView){
+
+    let hasSuccesfullyLoggedIn = (this.state.retrievedAccessToken.length > 1);
+    let shouldDisplayLogInScreen = (!this.state.displayAuthenticationWebView && this.state.retrievedAccessToken.length < 1)
+
+    if(shouldDisplayLogInScreen){
       return (
         this.logInScreenComponent()
       );
     }
-    else {
+    else if(this.state.displayAuthenticationWebView == true) {
       return (
         this.authenticationWebViewComponent()
+      );
+    }
+    else if(hasSuccesfullyLoggedIn){
+      return (
+        <View style={{alignItems: 'center' , justifyContent: 'center', flex: 1}}>
+          <Text>Congratulations you have logged in successfully</Text>
+        </View>
       );
     }
   }
