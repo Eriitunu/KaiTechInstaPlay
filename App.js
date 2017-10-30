@@ -47,6 +47,7 @@ export default class App extends React.Component {
       isUserLoggedIn: false,
       displayAuthenticationWebView: false,
       feedDataArray: [],
+      sessionData: null ,
       isDataLoading: false,
       successfullDataResponse: false,
       shouldDisplayLogInScreen: true,
@@ -97,10 +98,19 @@ export default class App extends React.Component {
   beginFetchUserSessionData = (accessToken) => {
     this.networkManager= new NetworkManager(accessToken);
 
-    this.networkManager.getLoggedInUserInformation();
+     let self = this;
+
+    this.networkManager.getLoggedInUserInformation((responseData) => {
+      self.setState({sessionData: responseData})
+
+      console.log(" App.js response data message = ");
+      console.log("");
+      console.log(responseData);
+    });
 
     this.setState({retrievedAccessToken: accessToken, isDataLoading: true, displayAuthenticationWebView: false});
   }
+
   orSeperatorComponent = () => {
       return (
         <View style={viewStyles.orSeperatorComponent}>
