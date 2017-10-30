@@ -97,6 +97,8 @@ export default class App extends React.Component {
   beginFetchUserSessionData = (accessToken) => {
     this.networkManager= new NetworkManager(accessToken);
 
+    this.networkManager.getLoggedInUserInformation();
+
     this.setState({retrievedAccessToken: accessToken, isDataLoading: true, displayAuthenticationWebView: false});
   }
   orSeperatorComponent = () => {

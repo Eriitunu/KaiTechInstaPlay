@@ -16,7 +16,7 @@ class NetworkManager{
   getLoggedInUserInformation(){
     axiosEndpointManager.get('self/?access_token=' + this.accessToken)
     .then(response => {
-      console.log(response);
+      console.log(response.data);
     })
     .catch(response => {
       console.log("Ooops this is an error")
