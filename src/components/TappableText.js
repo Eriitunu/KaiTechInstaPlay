@@ -23,4 +23,4 @@ class TappableText extends Component{
 }
 
 
-export { TappableText }
+export { TappableText };
