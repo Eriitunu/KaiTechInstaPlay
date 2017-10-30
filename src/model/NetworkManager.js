@@ -22,7 +22,7 @@ class NetworkManager{
   }
 
   getLoggedInUserInformation(completionCallback){
-    axiosEndpointManager.get('self/?access_token=' + this.accessToken)
+    return axiosEndpointManager.get('self/?access_token=' + this.accessToken)
     .then(response => {
       console.log(response);
       if (response.request.readyState == responseState.done){
@@ -31,12 +31,32 @@ class NetworkManager{
 
     })
     .catch(response => {
-      console.log("Ooops this is an error")
-      console.log(response)
+      console.log("Ooops this is an error eyaa");
+      console.log(response);
     });
 
   }
 
+  getFeedData(feedDataCallback){
+    return axiosEndpointManager.get('self/media/recent/?access_token=' + this.accessToken)
+    .then(response => {
+      console.log(response);
+      if (response.request.readyState == responseState.done){
+        feedDataCallback(response.data);
+      }
+    })
+
+    .catch(response => {
+      console.log("Ooops this is an error eyaaa");
+      console.log(response);
+    });
+  }
+
+  getSessionAndFeedData(sessionDataCallback, feedDataCallback){
+    this.getLoggedInUserInformation(sessionDataCallback)
+    .then(this.getFeedData(feedDataCallback));
+
+  }
 
 }
 export {NetworkManager};

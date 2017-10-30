@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, View, ScrollView, TouchableHighlight, Image, StatusBar, Linking, WebView, Alert, ActivityIndicator, StyleSheet} from 'react-native';
 import Dimensions from 'Dimensions';
-import {LoginButton, TappableText, } from './src/components';
+import {LoginButton, TappableText, InstaNavigationBar, InstaFeedCell} from './src/components';
 import {NetworkManager} from './src/model';
 import {BlurView } from 'expo';
 
@@ -100,12 +100,10 @@ export default class App extends React.Component {
 
      let self = this;
 
-    this.networkManager.getLoggedInUserInformation((responseData) => {
-      self.setState({sessionData: responseData})
-
-      console.log(" App.js response data message = ");
-      console.log("");
-      console.log(responseData);
+    this.networkManager.getSessionAndFeedData((sessionResponse) => {
+      self.setState({sessionData: sessionResponse});
+    }, (feedResponse) => {
+      self.setState({feedDataArray: feedResponse, isDataLoading: false});
     });
 
     this.setState({retrievedAccessToken: accessToken, isDataLoading: true, displayAuthenticationWebView: false});
@@ -273,8 +271,8 @@ export default class App extends React.Component {
     }
     else if(hasSuccesfullyLoggedIn){
       return (
-        <View style={{alignItems: 'center' , justifyContent: 'center', flex: 1}}>
-          <Text>Congratulations you have logged in successfully</Text>
+        <View style={{alignItems: 'center' ,  flex: 1}}>
+          <InstaNavigationBar />
         </View>
       );
     }
