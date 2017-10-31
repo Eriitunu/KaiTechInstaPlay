@@ -7,6 +7,7 @@ class InstaFeedCell extends Component {
 
     constructor(props){
       super(props);
+      this.cellData = props.cellData;
     }
 
     render(){

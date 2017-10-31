@@ -20,7 +20,7 @@ class InstaNavigationBar extends Component {
         <Image
           resizeMode={'cover'}
           source={require('../Images/icons/camera.png')}
-          style={viewStyles.genericIcon}
+          style={[viewStyles.genericIcon, {width: iconSize * 1.2 , height: iconSize * 1.2}]}
         />
 
 
@@ -58,8 +58,8 @@ const viewStyles = {
     borderBottomWidth: 1,
     borderColor: 'rgb(220, 220, 220)',
     backgroundColor: 'white',
-    paddingTop: 15,
-    paddingHorizontal: 10,
+    paddingTop: 20,
+    paddingHorizontal: 13,
     marginTop: 10
   },
   genericIcon: {
@@ -69,7 +69,7 @@ const viewStyles = {
     backgroundColor: 'transparent'
   },
   instagramHeaderLogo: {
-    width: 120,
+    width: 150,
     height: 45,
     backgroundColor: 'transparent'
   }

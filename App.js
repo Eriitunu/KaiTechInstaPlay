@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, ScrollView, TouchableHighlight, Image, StatusBar, Linking, WebView, Alert, ActivityIndicator, StyleSheet} from 'react-native';
+import {Text, View, ScrollView, TouchableHighlight, Image, StatusBar, Linking, WebView, Alert, ActivityIndicator, StyleSheet,FlatList } from 'react-native';
 import Dimensions from 'Dimensions';
 import {LoginButton, TappableText, InstaNavigationBar, InstaFeedCell} from './src/components';
 import {NetworkManager} from './src/model';
@@ -273,6 +273,11 @@ export default class App extends React.Component {
       return (
         <View style={{alignItems: 'center' ,  flex: 1}}>
           <InstaNavigationBar />
+          <FlatList
+            data={this.state.feedDataArray}
+            renderItem={({item}) => <InstaFeedCell cellData={item} />}
+            keyExtractor={item => item.id}
+            />
         </View>
       );
     }
